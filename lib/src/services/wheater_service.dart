@@ -4,7 +4,6 @@
 */
 
 import 'dart:convert';
-import 'package:examen_practico_clima/src/db/db_provider.dart';
 import 'package:http/http.dart' as http;
 import '../models/location_model.dart';
 import '../models/wheater_model.dart';

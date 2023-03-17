@@ -66,15 +66,15 @@ class WheaterBloc extends Bloc<WheaterEvent, WheaterState> {
     final metric = _prefs.metric;
     add( ChangeUnitsEvent( metric ));
 
-    final position = await Geolocator.getCurrentPosition();
     add( const ChangeIsLoadingEvent( isLoading: true ));
+    final position = await Geolocator.getCurrentPosition();
     final res = await getWheaterByLatLon( lat: position.latitude, lon: position.longitude );
-    add( const ChangeIsLoadingEvent( isLoading: false ));
     final cities = await _db.getAllCities();
-
+    add( const ChangeIsLoadingEvent( isLoading: false ));
+    
     if( res != null ){
       add( ChangeCurrentWheaterEvent(wheaterModel: res ));
-      add( ChangeLocationEvent(currentLocation: LocationModel( name: res.name, lat: res.coord.lat, lon: res.coord.lon)));
+      //add( ChangeLocationEvent(currentLocation: LocationModel( name: res.name, lat: res.coord.lat, lon: res.coord.lon)));
     }
 
     if( cities.isNotEmpty ){
@@ -83,9 +83,7 @@ class WheaterBloc extends Bloc<WheaterEvent, WheaterState> {
   }
 
   Future<WheaterModel?> getWheaterByLatLon( { required double lat, required double lon } ) async {
-    add( const ChangeIsLoadingEvent( isLoading: true ));
     final wheater = await wheaterService.getWheaterByLatLon(lat: lat , lon: lon, metric: state.unitsMetrics);
-    add( const ChangeIsLoadingEvent( isLoading: false ));
     if( wheater != null ){
       return wheater;
     }
