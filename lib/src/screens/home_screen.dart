@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
               time >= 0 && time <= 6
               ? Colors.black
               : time >= 7 && time <= 12
-              ?Colors.amber.shade300
+              ?Colors.amber.shade600
               : time >= 13 && time <= 19
               ? Colors.blue
               : Colors.black,
