@@ -16,12 +16,14 @@ class AccessGpsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context){
 
-    return BlocBuilder<GpsBloc, GpsState>(
-      builder: (context, state) {
-        return state.isGpsEnabled 
-        ? const GpsNotGranted()
-        : const GpsDisabled();
-      },
+    return Scaffold(
+      body: BlocBuilder<GpsBloc, GpsState>(
+        builder: (context, state) {
+          return state.isGpsEnabled 
+          ? const GpsNotGranted()
+          : const GpsDisabled();
+        },
+      ),
     );
   }
 }
@@ -33,8 +35,7 @@ class GpsNotGranted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -57,8 +58,7 @@ class GpsNotGranted extends StatelessWidget {
             )
           ],
         ),
-      ),
-    );
+      ); 
   }
 }
 
@@ -70,10 +70,17 @@ const GpsDisabled ({ Key? key }) : super(key: key);
   @override
   Widget build(BuildContext context){
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: const [
 
         Center(
-          child: Text('ACTIVE SU UBICACIÓN'),
+          child: Text(
+            'ACTIVE SU UBICACIÓN',
+          style: TextStyle( 
+            fontSize: 20,
+            fontWeight: FontWeight.bold
+          ),
+          ),
         ),
         
         SizedBox(

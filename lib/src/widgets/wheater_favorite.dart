@@ -70,57 +70,64 @@ class WheaterFavorite extends StatelessWidget {
             ],
           ),
 
-          FutureBuilder(
-            future: wheaterBloc.getWheaterByLatLon( lat: locationModel.lat, lon: locationModel.lon ),
-            builder: (_, snapshot){
-
-              if( snapshot.data == null || !snapshot.hasData ){
-                return const Center(child: Text('Obteneido resultados'));
-              }
-
-              final wheater = snapshot.data;
-
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-
-                  Column(
-                    children: [
-                      SizedBox(
-                        width: 100,
-                        child: FadeInImage(
-                        placeholder: const AssetImage('assets/loading-4.gif'),
-                        image: NetworkImage('https://openweathermap.org/img/wn/${ wheater?.weather[0].icon ?? '01d' }@4x.png'),
-                        fit: BoxFit.fill,
-                      ),
-                      ),
-                      Text('${wheater?.weather[0].description.toUpperCase()}',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white
-                        )
-                      ),
-                    ],
-                  ),
-
-                  BlocBuilder<WheaterBloc, WheaterState>(
-                    builder: (context, state) {
-                      return Text(
-                        '${ wheater?.main.temp ?? '-' } ${ state.unitsMetrics ? '°C' : '°F'}',
-                        style: const TextStyle(
-                          fontSize: 27,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white
+          Expanded(
+            child: FutureBuilder(
+              future: wheaterBloc.getWheaterByLatLon( lat: locationModel.lat, lon: locationModel.lon ),
+              builder: (_, snapshot){
+          
+                if( snapshot.data == null || !snapshot.hasData ){
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,  
+                    children: const [ 
+                      CircularProgressIndicator()
+                    ]
+                  );
+                }
+          
+                final wheater = snapshot.data;
+          
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+          
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: FadeInImage(
+                          placeholder: const AssetImage('assets/loading-4.gif'),
+                          image: NetworkImage('https://openweathermap.org/img/wn/${ wheater?.weather[0].icon ?? '01d' }@4x.png'),
+                          fit: BoxFit.fill,
                         ),
-                      );
-                    },
-                  ),
-                ],
-              );
-
-            }
+                        ),
+                        Text('${wheater?.weather[0].description.toUpperCase()}',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
+                          )
+                        ),
+                      ],
+                    ),
+          
+                    BlocBuilder<WheaterBloc, WheaterState>(
+                      builder: (context, state) {
+                        return Text(
+                          '${ wheater?.main.temp ?? '-' } ${ state.unitsMetrics ? '°C' : '°F'}',
+                          style: const TextStyle(
+                            fontSize: 27,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                );
+          
+              }
+            ),
           )
         ],
       ),
