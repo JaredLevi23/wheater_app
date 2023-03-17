@@ -47,13 +47,15 @@ class WheaterBloc extends Bloc<WheaterEvent, WheaterState> {
 
     on<DeleteLocationEvent>( _deleteLocationEvent );
 
+    on<ChangeIsLoadingEvent>((event, emit) => emit( state.copyWith( isLoading: event.isLoading ) ));
+
     on<ChangeUnitsEvent>((event, emit) async {
       emit( state.copyWith( unitsMetrics: event.unitsMetrics ));
       final res = await getWheaterByLatLon( lat: state.currentLocation.lat, lon: state.currentLocation.lon );
       if( res != null ){
-      add( ChangeCurrentWheaterEvent(wheaterModel: res ));
-      add( ChangeLocationEvent(currentLocation: LocationModel( name: res.name, lat: res.coord.lat, lon: res.coord.lon)));
-    }
+        add( ChangeCurrentWheaterEvent(wheaterModel: res ));
+        add( ChangeLocationEvent(currentLocation: LocationModel( name: res.name, lat: res.coord.lat, lon: res.coord.lon)));
+      }
     });
 
     _init();
@@ -65,9 +67,10 @@ class WheaterBloc extends Bloc<WheaterEvent, WheaterState> {
     add( ChangeUnitsEvent( metric ));
 
     final position = await Geolocator.getCurrentPosition();
+    add( const ChangeIsLoadingEvent( isLoading: true ));
     final res = await getWheaterByLatLon( lat: position.latitude, lon: position.longitude );
+    add( const ChangeIsLoadingEvent( isLoading: false ));
     final cities = await _db.getAllCities();
-
 
     if( res != null ){
       add( ChangeCurrentWheaterEvent(wheaterModel: res ));
@@ -80,7 +83,9 @@ class WheaterBloc extends Bloc<WheaterEvent, WheaterState> {
   }
 
   Future<WheaterModel?> getWheaterByLatLon( { required double lat, required double lon } ) async {
+    add( const ChangeIsLoadingEvent( isLoading: true ));
     final wheater = await wheaterService.getWheaterByLatLon(lat: lat , lon: lon, metric: state.unitsMetrics);
+    add( const ChangeIsLoadingEvent( isLoading: false ));
     if( wheater != null ){
       return wheater;
     }

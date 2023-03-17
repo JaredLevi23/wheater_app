@@ -3,6 +3,7 @@
 *  Function: Shows the weather information of the location selected or loading screen
 */
 
+import 'package:examen_practico_clima/src/views/error_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,9 +24,12 @@ class HomeView extends StatelessWidget {
         child: BlocBuilder<WheaterBloc, WheaterState>(
           builder: (context, state) {
 
-            if( state.wheaterModel == null ){
+            if( state.isLoading ){
               return const WheaterLoadingView();
+            }else if( !state.isLoading && state.wheaterModel == null){
+              return const ErrorView();
             }
+
             return const WheaterView();
           },
         ),

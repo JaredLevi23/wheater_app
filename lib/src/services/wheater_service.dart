@@ -4,6 +4,7 @@
 */
 
 import 'dart:convert';
+import 'package:examen_practico_clima/src/db/db_provider.dart';
 import 'package:http/http.dart' as http;
 import '../models/location_model.dart';
 import '../models/wheater_model.dart';
@@ -14,15 +15,19 @@ class WheaterService{
   final _baseUrl = 'http://api.openweathermap.org';
 
   Future<List<LocationModel>> searchLocations( String name ) async {
-    final locations = await http.get(
-      Uri.parse('$_baseUrl/geo/1.0/direct?limit=5&appid=$_appid&q=$name')
-    );
+    try {
+      final locations = await http.get(
+        Uri.parse('$_baseUrl/geo/1.0/direct?limit=5&appid=$_appid&q=$name')
+      );
 
-    if( locations.statusCode == 200 ){
-      final List decoded = json.decode( locations.body );
-      return decoded.map(( location ) => LocationModel.fromJson( location )  ).toList();
+      if( locations.statusCode == 200 ){
+        final List decoded = json.decode( locations.body );
+        return decoded.map(( location ) => LocationModel.fromJson( location )  ).toList();
+      }
+      return [];
+    } catch (e) {
+      return [];
     }
-    return [];
   }
 
   Future<WheaterModel?> getWheaterByLatLon({ required double lat, required double lon, required bool metric  }) async {
@@ -36,7 +41,7 @@ class WheaterService{
       }
 
       return null;
-    } catch (e) {
+    } catch (e){
       return null;
     }
   }
