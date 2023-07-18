@@ -15,18 +15,46 @@ class FavoriteView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-        body: BlocBuilder<WheaterBloc, WheaterState>(
-          builder: (context, state) {
-
-            final locations = state.locations;
-
-            return ListView.builder(
-              itemCount: locations.length,
-              itemBuilder: (_, index) {
-                return WheaterFavorite(locationModel: locations[index]);
-              },
-            );
-          },
+        body: SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: BlocBuilder<WheaterBloc, WheaterState>(
+            builder: (context, state) {
+        
+              final locations = state.locations;
+        
+              if( locations.isEmpty ){
+                return  Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'No ha guardado ningun lugar',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white
+                      ),
+                
+                    ),
+                
+                    Icon( 
+                      Icons.favorite_border,
+                      color: Colors.pink,
+                      size: 30,
+                    )
+                  ],
+                );
+              }
+        
+              return ListView.builder(
+                itemCount: locations.length,
+                itemBuilder: (_, index) {
+                  return WheaterFavorite(locationModel: locations[index]);
+                },
+              );
+            },
+          ),
         ));
   }
 }

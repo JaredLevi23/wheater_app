@@ -35,30 +35,32 @@ class GpsNotGranted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'ACEPTE EL PERMISO DE UBICACIÓN',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 17),
-            ),
-    
-            const SizedBox(
-              height: 20,
-            ),
-            
-            CustomButton(
-              text: 'SOLICITAR PERMISOS',
-              onPressed: () async {
-                final gpsBloc = BlocProvider.of<GpsBloc>(context, listen: false);
-                await gpsBloc.getGpsAccess();
-              },
-            )
-          ],
+    return Scaffold(
+      body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'ACEPTE EL PERMISO DE UBICACIÓN',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 17),
+              ),
+      
+              const SizedBox(
+                height: 20,
+              ),
+              
+              CustomButton(
+                text: 'SOLICITAR PERMISOS',
+                onPressed: () async {
+                  final gpsBloc = BlocProvider.of<GpsBloc>(context, listen: false);
+                  await gpsBloc.getGpsAccess();
+                },
+              )
+            ],
+          ),
         ),
-      ); 
+    ); 
   }
 }
 

@@ -14,12 +14,14 @@ class ValidationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GpsBloc, GpsState>(
-      builder: (context, state) {
-        return state.isReady 
-        ? const HomeScreen()
-        : const AccessGpsScreen();
-      },
+    return Scaffold(
+      body: BlocBuilder<GpsBloc, GpsState>(
+        builder: (context, state) {
+          return state.isReady 
+          ? const HomeScreen()
+          : const AccessGpsScreen();
+        },
+      ),
     );
   }
 }
